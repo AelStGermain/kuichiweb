@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head_content}"></head>
+<body>
+    <nav th:replace="~{layout/main :: navbar}"></nav>
+
+    <div class="container">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+            <h2>🐾 Mis Mascotas</h2>
+            <a th:href="@{/pets/new}" class="btn">
+                <i class="fas fa-plus"></i> Nueva Mascota
+            </a>
+        </div>
+
+        <table th:if="${!pets.empty}">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Especie</th>
+                    <th>Raza</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="pet : ${pets}">
+                    <td style="font-weight:bold;" th:text="${pet.name}">Bobby</td>
+                    <td>
+                        <span th:if="${pet.species == 'Perro'}" style="background:#e3f2fd; color:#4facfe; padding:5px 10px; border-radius:20px;">🐶 Perro</span>
+                        <span th:if="${pet.species == 'Gato'}" style="background:#fce4ec; color:#ff9a9e; padding:5px 10px; border-radius:20px;">🐱 Gato</span>
+                        <span th:unless="${pet.species == 'Perro' || pet.species == 'Gato'}" th:text="${pet.species}">Otro</span>
+                    </td>
+                    <td th:text="${pet.breed}">Poodle</td>
+                    <td>
+                        <a th:href="@{/pets/edit/{id}(id=${pet.id})}" style="color:var(--primary); margin-right:10px;">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+                        <a th:href="@{/pets/delete/{id}(id=${pet.id})}" 
+                           onclick="return confirm('¿Estás seguro de eliminar a esta mascota?');" 
+                           style="color:red;">
+                            <i class="fas fa-trash"></i> Borrar
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div th:if="${pets.empty}" style="text-align:center; padding:50px; background:white; border-radius:20px;">
+            <h3 style="color:#ccc;">No tienes mascotas registradas aún.</h3>
+            <a th:href="@{/pets/new}" class="btn btn-secondary">¡Agrega la primera!</a>
+        </div>
+    </div>
+
+    <div th:replace="~{layout/main :: footer}"></div>
+</body>
+</html>

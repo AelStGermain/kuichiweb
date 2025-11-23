@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head_content}"></head>
+<body style="background: #f0f2f5; display:flex; align-items:center; justify-content:center; min-height:100vh;">
+
+    <div class="card" style="width: 100%; max-width: 500px;">
+        <h2 style="text-align: center; color: #ff9a9e;">📝 Crear Cuenta Nueva</h2>
+        
+        <form th:action="@{/auth/register}" th:object="${user}" method="post">
+            <label>Nombre de Usuario</label>
+            <input type="text" th:field="*{username}" placeholder="Ej: juanperez" required>
+            
+            <label>Contraseña</label>
+            <input type="password" th:field="*{password}" placeholder="******" required>
+            
+            <label>Nombre Completo</label>
+            <input type="text" th:field="*{fullName}" placeholder="Ej: Juan Pérez" required>
+            
+            <label>Email</label>
+            <input type="email" th:field="*{email}" placeholder="juan@email.com" required>
+            
+            <button type="submit" class="btn btn-secondary" style="width:100%">REGISTRARSE</button>
+        </form>
+        
+        <div style="text-align: center; margin-top: 15px;">
+            <a th:href="@{/auth/login}">¿Ya tienes cuenta? Ingresa</a>
+        </div>
+    </div>
+
+</body>
+</html>

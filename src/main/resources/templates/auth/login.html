@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head_content}"></head>
+<body style="background: #f0f2f5; display:flex; align-items:center; justify-content:center; height:100vh;">
+
+    <div class="card" style="width: 100%; max-width: 400px; text-align: center;">
+        <h2 style="color: #4facfe;">🐶 ¡Bienvenido!</h2>
+        <p>Ingresa a KuichiVet</p>
+        
+        <div th:if="${param.error}" style="color: red; margin-bottom: 10px;">Credenciales incorrectas</div>
+        <div th:if="${param.logout}" style="color: green; margin-bottom: 10px;">Has cerrado sesión</div>
+        <div th:if="${param.registered}" style="color: green; margin-bottom: 10px;">¡Registro exitoso! Ingresa ahora.</div>
+
+        <form th:action="@{/auth/login}" method="post">
+            <input type="text" name="username" placeholder="Usuario" required>
+            <input type="password" name="password" placeholder="Contraseña" required>
+            <button type="submit" class="btn" style="width:100%">INGRESAR</button>
+        </form>
+
+        <p style="margin-top: 20px;">
+            ¿No tienes cuenta? <a th:href="@{/auth/register}">Regístrate aquí</a>
+        </p>
+        <p><a th:href="@{/}">Volver al Inicio</a></p>
+    </div>
+
+</body>
+</html>

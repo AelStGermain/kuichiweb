@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head_content}"></head>
+<body>
+    <nav th:replace="~{layout/main :: navbar}"></nav>
+
+    <div class="container">
+        <h2 style="color:var(--offer-color);">🔥 Todas las Ofertas Disponibles</h2>
+        <p>Aprovecha estos descuentos exclusivos para cuidar a tu mascota.</p>
+
+        <div class="grid">
+            <div class="card" th:each="offer : ${offers}">
+                <div style="position:absolute; top:15px; right:15px; background:#ff6b6b; color:white; padding:5px 12px; border-radius:20px; font-weight:bold;">
+                    -<span th:text="${offer.discountPercentage}">20</span>%
+                </div>
+
+                <h3 th:text="${offer.title}">Título Oferta</h3>
+                
+                <p style="color:#666; font-size:0.95rem;" th:text="${offer.description}">
+                    Descripción de la oferta...
+                </p>
+                
+                <hr style="border:0; border-top:1px solid #eee; margin:15px 0;">
+                
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                    <small style="color:#888;">
+                        Válido en: <strong th:text="${offer.clinic.name}">Clínica</strong>
+                    </small>
+                    <button class="btn btn-danger" style="padding:8px 15px; font-size:0.8rem;">Ver Cupón</button>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${offers.empty}" style="text-align:center; margin-top:50px; color:#999;">
+            <h3>No hay ofertas activas por el momento.</h3>
+        </div>
+    </div>
+
+    <div th:replace="~{layout/main :: footer}"></div>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head_content">
+    <meta charset="UTF-8">
+    <title>KuichiVet - Tu Mascota Feliz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <nav th:fragment="navbar">
+        <div style="display:flex; align-items:center;">
+            <i class="fas fa-paw fa-2x" style="margin-right:10px; color:var(--primary);"></i>
+            <h1><a th:href="@{/}" style="margin:0; padding:0; background:none; color:var(--text);">KUICHI VET</a></h1>
+        </div>
+        
+        <div style="display:flex; align-items: center; gap: 15px;">
+            <a th:href="@{/}">Inicio</a>
+            <a th:href="@{/clinics}">Veterinarias</a>
+            <a th:href="@{/offers}">Ofertas</a>
+            
+            <span sec:authorize="isAnonymous()">
+                <a th:href="@{/auth/login}" style="color:var(--primary);">Ingresar</a>
+                <a th:href="@{/auth/register}" class="btn" style="padding:8px 20px; font-size:0.9rem;">Registrarse</a>
+            </span>
+
+            <span sec:authorize="isAuthenticated()" style="display:flex; align-items:center; gap:10px;">
+                
+                <a th:href="@{/pets}" class="btn btn-secondary" style="padding:8px 15px; font-size:0.9rem;">
+                    🐾 Mis Mascotas
+                </a>
+
+                <span style="font-size: 0.9rem; color: #888;">
+                    Hola, <b sec:authentication="name">Usuario</b>
+                </span>
+
+                <form th:action="@{/logout}" method="post" style="margin:0;">
+                    <button type="submit" class="btn btn-danger" style="padding:8px 15px; font-size:0.9rem; display:flex; align-items:center; gap:5px;">
+                        <i class="fas fa-sign-out-alt"></i> Salir
+                    </button>
+                </form>
+            </span>
+        </div>
+    </nav>
+    <div class="container">
+        <footer th:fragment="footer" style="margin-top:50px; text-align:center; color:#888; font-size:0.9rem;">
+            <p>© 2025 KuichiVet System - Cuidando a tus regalones</p>
+        </footer>
+    </div>
+
+</body>
+</html>

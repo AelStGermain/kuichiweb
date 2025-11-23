@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/main :: head_content}"></head>
+<body>
+    <nav th:replace="~{layout/main :: navbar}"></nav>
+
+    <div class="container">
+        <div class="card" style="max-width: 600px; margin: 0 auto;">
+            <h2 style="text-align:center; color:var(--primary);">
+                <span th:if="${pet.id == null}">Nuevo Integrante</span>
+                <span th:if="${pet.id != null}">Editar Mascota</span>
+            </h2>
+
+            <form th:action="@{/pets/save}" th:object="${pet}" method="post">
+                <input type="hidden" th:field="*{id}" />
+
+                <label>Nombre de la Mascota</label>
+                <input type="text" th:field="*{name}" required placeholder="Ej: Bobby">
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                    <div>
+                        <label>Especie</label>
+                        <select th:field="*{species}">
+                            <option value="Perro">Perro 🐶</option>
+                            <option value="Gato">Gato 🐱</option>
+                            <option value="Otro">Otro 🐹</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Raza</label>
+                        <input type="text" th:field="*{breed}" placeholder="Ej: Golden Retriever">
+                    </div>
+                </div>
+
+                <label>Historia Médica / Notas</label>
+                <textarea th:field="*{medicalHistory}" rows="4" placeholder="Alergias, vacunas pendientes, etc..."></textarea>
+
+                <div style="display:flex; gap:10px; margin-top:20px;">
+                    <button type="submit" class="btn" style="flex:1;">GUARDAR</button>
+                    <a th:href="@{/pets}" class="btn btn-danger" style="flex:1; text-align:center; background: #ccc; color:#333;">CANCELAR</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div th:replace="~{layout/main :: footer}"></div>
+</body>
+</html>

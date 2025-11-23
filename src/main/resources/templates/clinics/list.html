@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="~{layout/main :: head_content}"></head>
+
+<body>
+    <nav th:replace="~{layout/main :: navbar}"></nav>
+
+    <div class="container">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+            <h2>🏥 Veterinarias Asociadas</h2>
+
+            <div sec:authorize="isAuthenticated()">
+                <a th:href="@{/clinics/new}" class="btn">
+                    <i class="fas fa-plus"></i> Registrar Veterinaria
+                </a>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="card" th:each="clinic : ${clinics}" style="padding:0; overflow:hidden;">
+                <div style="height:180px; overflow:hidden;">
+                    <img th:if="${clinic.imageUrl != null}" th:src="${clinic.imageUrl}"
+                        style="width:100%; height:100%; object-fit:cover;">
+                    <div th:if="${clinic.imageUrl == null}"
+                        style="width:100%; height:100%; background:#e3f2fd; display:flex; align-items:center; justify-content:center;">
+                        <i class="fas fa-clinic-medical fa-3x" style="color:#4facfe;"></i>
+                    </div>
+                </div>
+
+                <div style="padding:20px;">
+                    <h3 th:text="${clinic.name}" style="margin-top:0;">Nombre Clínica</h3>
+                    <p style="font-size:0.9rem;"><i class="fas fa-map-marker-alt"></i> <span
+                            th:text="${clinic.address}">Dirección</span></p>
+                    <p style="font-size:0.9rem;"><i class="fas fa-phone"></i> <span
+                            th:text="${clinic.phone}">Teléfono</span></p>
+
+                    <div style="color:#ffc107; font-size:0.9rem; margin:10px 0;">
+                        <span th:text="${clinic.averageRating}">0.0</span> <i class="fas fa-star"></i>
+                        <span style="color:#666; font-size:0.85rem;">
+                            (<span th:text="${clinic.reviews.size()}">0</span> reseñas)
+                        </span>
+                    </div>
+
+                    <p style="font-size:0.9rem; color:#666;" th:text="${clinic.description}">Desc...</p>
+
+                    <!-- Formulario para agregar reseña (solo usuarios autenticados) -->
+                    <div sec:authorize="isAuthenticated()"
+                        style="margin-top:15px; padding-top:15px; border-top:1px solid #eee;">
+                        <details style="cursor:pointer;">
+                            <summary style="font-weight:bold; color:var(--primary); font-size:0.9rem;">
+                                ✍️ Agregar Reseña
+                            </summary>
+                            <form th:action="@{/reviews/add/{clinicId}(clinicId=${clinic.id})}" method="post"
+                                style="margin-top:10px; padding:15px; background:#f8f9fa; border-radius:8px;">
+                                <label
+                                    style="font-size:0.85rem; font-weight:bold; display:block; margin-bottom:5px;">Calificación:</label>
+                                <div class="star-rating"
+                                    style="display:flex; flex-direction:row-reverse; justify-content:flex-end; gap:5px; margin-bottom:10px; font-size:2rem;">
+                                    <input type="radio" name="rating" value="5" th:id="'star5-add-' + ${clinic.id}"
+                                        required style="display:none;">
+                                    <label th:for="'star5-add-' + ${clinic.id}"
+                                        style="cursor:pointer; color:#ddd;">★</label>
+
+                                    <input type="radio" name="rating" value="4" th:id="'star4-add-' + ${clinic.id}"
+                                        style="display:none;">
+                                    <label th:for="'star4-add-' + ${clinic.id}"
+                                        style="cursor:pointer; color:#ddd;">★</label>
+
+                                    <input type="radio" name="rating" value="3" th:id="'star3-add-' + ${clinic.id}"
+                                        style="display:none;">
+                                    <label th:for="'star3-add-' + ${clinic.id}"
+                                        style="cursor:pointer; color:#ddd;">★</label>
+
+                                    <input type="radio" name="rating" value="2" th:id="'star2-add-' + ${clinic.id}"
+                                        style="display:none;">
+                                    <label th:for="'star2-add-' + ${clinic.id}"
+                                        style="cursor:pointer; color:#ddd;">★</label>
+
+                                    <input type="radio" name="rating" value="1" th:id="'star1-add-' + ${clinic.id}"
+                                        style="display:none;">
+                                    <label th:for="'star1-add-' + ${clinic.id}"
+                                        style="cursor:pointer; color:#ddd;">★</label>
+                                </div>
+
+                                <label
+                                    style="font-size:0.85rem; font-weight:bold; display:block; margin-bottom:5px;">Comentario:</label>
+                                <textarea name="comment" rows="3" required placeholder="Cuéntanos tu experiencia..."
+                                    style="width:100%; padding:8px; border:1px solid #ddd; border-radius:6px; font-size:0.85rem;"></textarea>
+
+                                <button type="submit" class="btn"
+                                    style="width:100%; margin-top:10px; padding:8px; font-size:0.85rem;">Publicar
+                                    Reseña</button>
+                            </form>
+
+                            <style>
+                                .star-rating input:checked~label,
+                                .star-rating label:hover,
+                                .star-rating label:hover~label {
+                                    color: #ffc107 !important;
+                                }
+                            </style>
+                        </details>
+                    </div>
+
+                    <!-- Mostrar reseñas existentes -->
+                    <div th:if="${!clinic.reviews.isEmpty()}"
+                        style="margin-top:15px; padding-top:15px; border-top:1px solid #eee;">
+                        <h4 style="font-size:0.9rem; margin-bottom:10px;">📝 Reseñas:</h4>
+                        <div th:each="review, iterStat : ${clinic.reviews}" th:if="${iterStat.index < 3}"
+                            style="margin-bottom:10px; padding:10px; background:#f8f9fa; border-radius:8px; position:relative;">
+                            <div
+                                style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+                                <strong style="font-size:0.85rem;" th:text="${review.author.fullName}">Usuario</strong>
+                                <div style="color:#ffc107; font-size:0.75rem;">
+                                    <span th:each="i : ${#numbers.sequence(1, review.rating)}">★</span>
+                                </div>
+                            </div>
+                            <p style="font-size:0.8rem; color:#666; margin:0 0 10px 0;" th:text="${review.comment}">
+                                Comentario...
+                            </p>
+
+                            <!-- Botones de editar/eliminar solo para el autor -->
+                            <div sec:authorize="isAuthenticated()"
+                                th:if="${#authentication.name == review.author.username}"
+                                style="display:flex; gap:5px;">
+                                <details style="flex:1;">
+                                    <summary
+                                        style="cursor:pointer; font-size:0.75rem; color:var(--primary); padding:4px 8px; background:white; border:1px solid var(--primary); border-radius:4px; text-align:center;">
+                                        Editar</summary>
+                                    <form th:action="@{/reviews/update/{reviewId}(reviewId=${review.id})}" method="post"
+                                        style="margin-top:8px; padding:10px; background:white; border-radius:6px;">
+                                        <div class="star-rating"
+                                            style="display:flex; flex-direction:row-reverse; justify-content:flex-end; gap:3px; margin-bottom:8px; font-size:1.5rem;">
+                                            <input type="radio" name="rating" value="5"
+                                                th:id="'star5-edit-' + ${review.id}" th:checked="${review.rating == 5}"
+                                                required style="display:none;">
+                                            <label th:for="'star5-edit-' + ${review.id}"
+                                                style="cursor:pointer; color:#ddd;">★</label>
+
+                                            <input type="radio" name="rating" value="4"
+                                                th:id="'star4-edit-' + ${review.id}" th:checked="${review.rating == 4}"
+                                                style="display:none;">
+                                            <label th:for="'star4-edit-' + ${review.id}"
+                                                style="cursor:pointer; color:#ddd;">★</label>
+
+                                            <input type="radio" name="rating" value="3"
+                                                th:id="'star3-edit-' + ${review.id}" th:checked="${review.rating == 3}"
+                                                style="display:none;">
+                                            <label th:for="'star3-edit-' + ${review.id}"
+                                                style="cursor:pointer; color:#ddd;">★</label>
+
+                                            <input type="radio" name="rating" value="2"
+                                                th:id="'star2-edit-' + ${review.id}" th:checked="${review.rating == 2}"
+                                                style="display:none;">
+                                            <label th:for="'star2-edit-' + ${review.id}"
+                                                style="cursor:pointer; color:#ddd;">★</label>
+
+                                            <input type="radio" name="rating" value="1"
+                                                th:id="'star1-edit-' + ${review.id}" th:checked="${review.rating == 1}"
+                                                style="display:none;">
+                                            <label th:for="'star1-edit-' + ${review.id}"
+                                                style="cursor:pointer; color:#ddd;">★</label>
+                                        </div>
+                                        <textarea name="comment" rows="2" required
+                                            style="width:100%; padding:6px; border:1px solid #ddd; border-radius:4px; font-size:0.75rem;"
+                                            th:text="${review.comment}"></textarea>
+                                        <button type="submit" class="btn btn-secondary"
+                                            style="width:100%; margin-top:6px; padding:6px; font-size:0.75rem;">Guardar</button>
+                                    </form>
+                                </details>
+                                <a th:href="@{/reviews/delete/{reviewId}(reviewId=${review.id})}"
+                                    onclick="return confirm('¿Eliminar esta reseña?');" class="btn btn-danger"
+                                    style="flex:1; font-size:0.75rem; padding:4px 8px; text-align:center; text-decoration:none;">Borrar</a>
+                            </div>
+                        </div>
+                        <small th:if="${clinic.reviews.size() > 3}" style="color:#666;">
+                            + <span th:text="${clinic.reviews.size() - 3}">0</span> reseñas más
+                        </small>
+                    </div>
+
+                    <div sec:authorize="isAuthenticated()"
+                        style="margin-top:10px; padding-top:10px; border-top:1px solid #eee; display:flex; gap:10px;">
+                        <a th:href="@{/clinics/edit/{id}(id=${clinic.id})}" class="btn btn-secondary"
+                            style="flex:1; font-size:0.8rem; padding:8px; text-align:center;">Editar</a>
+                        <a th:href="@{/clinics/delete/{id}(id=${clinic.id})}"
+                            onclick="return confirm('¿Eliminar esta clínica?');" class="btn btn-danger"
+                            style="flex:1; font-size:0.8rem; padding:8px; text-align:center;">Borrar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{layout/main :: footer}"></div>
+</body>
+
+</html>

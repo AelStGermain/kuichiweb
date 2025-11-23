@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/main :: head_content}"></head>
+<body>
+    <nav th:replace="~{layout/main :: navbar}"></nav>
+
+    <div sec:authorize="isAnonymous()">
+        <div class="hero-section">
+            <div class="hero-overlay"></div>
+            
+            <div id="slider-bg" class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1548767797-d8c844163c65?q=80');"></div>
+
+            <div class="hero-content">
+                <h1>Cuidamos lo que más amas</h1>
+                <p style="font-size: 1.5rem; margin-bottom: 30px;">La red de veterinarias más grande de Santiago. Encuentra ofertas exclusivas y atención de urgencia en un solo lugar.</p>
+                
+                <div style="display:flex; gap:20px; justify-content:center;">
+                    <a th:href="@{/auth/register}" class="btn" style="padding: 15px 40px; font-size: 1.2rem;">Crear Cuenta Gratis</a>
+                    <a th:href="@{/auth/login}" class="btn btn-secondary" style="padding: 15px 40px; font-size: 1.2rem; background: white; color: var(--primary);">Ingresar</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" style="text-align:center; margin-top:60px;">
+            <h2 style="border:none; font-size:2.5rem; color:var(--primary);">¿Por qué elegir KuichiVet?</h2>
+            <div class="grid">
+                <div class="card">
+                    <i class="fas fa-search-location fa-3x" style="color:var(--primary); margin-bottom:15px;"></i>
+                    <h3>Ubicación Inteligente</h3>
+                    <p>Encuentra la clínica más cercana a tu hogar en segundos.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-tags fa-3x" style="color:var(--offer-color); margin-bottom:15px;"></i>
+                    <h3>Descuentos Reales</h3>
+                    <p>Ofertas verificadas en vacunas, consultas y cirugías.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-star fa-3x" style="color:#ffc107; margin-bottom:15px;"></i>
+                    <h3>Opiniones Reales</h3>
+                    <p>Lee reseñas de otros dueños antes de elegir tu veterinaria.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div sec:authorize="isAuthenticated()">
+        <div class="container">
+            
+            <div style="background: white; padding: 30px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 40px; display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <h1 style="margin:0; border:none; color:var(--primary);">¡Hola, <span sec:authentication="name">Usuario</span>! 👋</h1>
+                    <p style="margin:5px 0 0 0; color:#666;">¿Qué necesita tu mascota hoy?</p>
+                </div>
+                <div>
+                    <a th:href="@{/clinics}" class="btn">Buscar Veterinaria</a>
+                </div>
+            </div>
+
+            <h2 style="margin-bottom: 20px;">🔥 Ofertas para ti</h2>
+            <div class="grid">
+                <div class="card" th:each="offer : ${offers}">
+                    <span class="badge" th:text="'-' + ${offer.discountPercentage} + '%'">-20%</span>
+                    <h3 th:text="${offer.title}">Título Oferta</h3>
+                    <p th:text="${offer.description}">Desc...</p>
+                    <small style="color:var(--primary); font-weight:bold;" th:text="${offer.clinic.name}">Clínica</small>
+                    <br><br>
+                    <a th:href="@{/clinics/{id}(id=${offer.clinic.id})}" class="btn btn-danger" style="width:100%; text-align:center;">Ir a la Clínica</a>
+                </div>
+            </div>
+
+            <br><hr style="border:0; border-top:1px solid #eee; margin:40px 0;"><br>
+
+            <h2 style="margin-bottom: 20px;">🏥 Veterinarias Destacadas</h2>
+            <div class="grid">
+                <div class="card" th:each="clinic : ${clinics}" style="padding:0; overflow:hidden;">
+                    <div style="height:180px; overflow:hidden;">
+                        <img th:if="${clinic.imageUrl != null}" th:src="${clinic.imageUrl}" style="width:100%; height:100%; object-fit:cover;">
+                        <div th:if="${clinic.imageUrl == null}" style="width:100%; height:100%; background:#eee; display:flex; align-items:center; justify-content:center;">
+                            <i class="fas fa-clinic-medical fa-3x" style="color:#ccc;"></i>
+                        </div>
+                    </div>
+                    
+                    <div style="padding:20px;">
+                        <h3 th:text="${clinic.name}" style="margin-top:0;">Nombre</h3>
+                        <p style="font-size:0.9rem;"><i class="fas fa-map-marker-alt"></i> <span th:text="${clinic.address}"></span></p>
+                        
+                        <div style="color:#ffc107; font-size:0.9rem; margin-bottom:15px;">
+                            <span th:text="${clinic.averageRating}">4.5</span> <i class="fas fa-star"></i>
+                        </div>
+
+                        <a th:href="@{/clinics/{id}(id=${clinic.id})}" class="btn btn-secondary" style="width:100%; display:block; text-align:center;">Ver Perfil</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{layout/main :: footer}"></div>
+
+    <script sec:authorize="isAnonymous()">
+        const images = [
+            'https://images.unsplash.com/photo-1548767797-d8c844163c65?q=80', // Perros felices
+            'https://images.unsplash.com/photo-1623366302587-b38b1ddaefd9?q=80', // Gato veterinario
+            'https://images.unsplash.com/photo-1576201836106-db1758fd1c97?q=80'  // Cachorro siendo revisado
+        ];
+        let i = 0;
+        const bg = document.getElementById('slider-bg');
+        
+        setInterval(() => {
+            i = (i + 1) % images.length;
+            bg.style.opacity = 0; // Desvanecer
+            setTimeout(() => {
+                bg.style.backgroundImage = `url('${images[i]}')`;
+                bg.style.opacity = 1; // Aparecer
+            }, 1000); // Esperar a que desvanezca
+        }, 5000); // Cambiar cada 5 segundos
+    </script>
+</body>
+</html>
