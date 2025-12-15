@@ -10,7 +10,8 @@
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
             <h2>🏥 Veterinarias Asociadas</h2>
 
-            <div sec:authorize="isAuthenticated()">
+            <!-- Solo ADMIN puede registrar nuevas veterinarias -->
+            <div sec:authorize="hasRole('ADMIN')">
                 <a th:href="@{/clinics/new}" class="btn">
                     <i class="fas fa-plus"></i> Registrar Veterinaria
                 </a>
@@ -179,13 +180,18 @@
                         </small>
                     </div>
 
-                    <div sec:authorize="isAuthenticated()"
+                    <!-- Solo ADMIN puede editar/eliminar clínicas -->
+                    <div sec:authorize="hasRole('ADMIN')"
                         style="margin-top:10px; padding-top:10px; border-top:1px solid #eee; display:flex; gap:10px;">
                         <a th:href="@{/clinics/edit/{id}(id=${clinic.id})}" class="btn btn-secondary"
-                            style="flex:1; font-size:0.8rem; padding:8px; text-align:center;">Editar</a>
+                            style="flex:1; font-size:0.8rem; padding:8px; text-align:center;">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
                         <a th:href="@{/clinics/delete/{id}(id=${clinic.id})}"
                             onclick="return confirm('¿Eliminar esta clínica?');" class="btn btn-danger"
-                            style="flex:1; font-size:0.8rem; padding:8px; text-align:center;">Borrar</a>
+                            style="flex:1; font-size:0.8rem; padding:8px; text-align:center;">
+                            <i class="fas fa-trash"></i> Borrar
+                        </a>
                     </div>
                 </div>
             </div>

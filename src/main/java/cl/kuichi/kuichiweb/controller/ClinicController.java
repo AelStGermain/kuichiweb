@@ -8,8 +8,10 @@ import cl.kuichi.kuichiweb.service.ClinicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.security.Principal;
 
 @Controller
@@ -18,7 +20,7 @@ public class ClinicController {
 
     @Autowired
     private ClinicService clinicService;
-    
+
     @Autowired
     private AppUserService userService;
 
@@ -47,7 +49,12 @@ public class ClinicController {
 
     // 4. GUARDAR CLÍNICA
     @PostMapping("/save")
-    public String saveClinic(@ModelAttribute Clinic clinic) {
+    public String saveClinic(@Valid @ModelAttribute Clinic clinic,
+            BindingResult result,
+            Model model) {
+        if (result.hasErrors()) {
+            return "clinics/form"; // Volver al formulario mostrando errores
+        }
         clinicService.saveClinic(clinic);
         return "redirect:/clinics";
     }

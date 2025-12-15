@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="~{layout/main :: head_content}"></head>
+
 <body>
     <nav th:replace="~{layout/main :: navbar}"></nav>
 
     <div class="container">
         <div class="card" style="max-width: 800px; margin: 0 auto;">
             <h2 style="text-align:center; color:var(--primary);">
-                <i class="fas fa-hospital-alt"></i> 
+                <i class="fas fa-hospital-alt"></i>
                 <span th:if="${clinic.id == null}">Registrar Nueva Veterinaria</span>
                 <span th:if="${clinic.id != null}">Editar Datos Veterinaria</span>
             </h2>
@@ -16,45 +18,63 @@
                 <input type="hidden" th:field="*{id}" />
 
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
-                    
+
                     <div>
                         <label>Nombre de la Clínica *</label>
-                        <input type="text" th:field="*{name}" required placeholder="Ej: VetVida Santiago">
+                        <input type="text" th:field="*{name}" placeholder="Ej: VetVida Santiago">
+                        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+                            style="color: red; font-size: 0.85em; display: block; margin-top: 5px;"></span>
 
                         <label>Dirección *</label>
-                        <input type="text" th:field="*{address}" required placeholder="Calle, Número, Comuna">
+                        <input type="text" th:field="*{address}" placeholder="Calle, Número, Comuna">
+                        <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}"
+                            style="color: red; font-size: 0.85em; display: block; margin-top: 5px;"></span>
 
                         <label>Teléfono</label>
                         <input type="text" th:field="*{phone}" placeholder="+569...">
+                        <span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"
+                            style="color: red; font-size: 0.85em; display: block; margin-top: 5px;"></span>
                     </div>
 
                     <div>
                         <label>Email de Contacto</label>
                         <input type="email" th:field="*{email}" placeholder="contacto@vetvida.cl">
+                        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+                            style="color: red; font-size: 0.85em; display: block; margin-top: 5px;"></span>
 
                         <label>Sitio Web</label>
                         <input type="text" th:field="*{website}" placeholder="www.vetvida.cl">
+                        <span th:if="${#fields.hasErrors('website')}" th:errors="*{website}"
+                            style="color: red; font-size: 0.85em; display: block; margin-top: 5px;"></span>
 
                         <label>Horario de Atención</label>
                         <input type="text" th:field="*{openingHours}" placeholder="Lu-Vi 09:00 - 20:00">
+                        <span th:if="${#fields.hasErrors('openingHours')}" th:errors="*{openingHours}"
+                            style="color: red; font-size: 0.85em; display: block; margin-top: 5px;"></span>
                     </div>
                 </div>
 
-                <div style="background:#e3f2fd; padding:15px; border-radius:10px; margin-bottom:20px; display:flex; align-items:center;">
+                <div
+                    style="background:#e3f2fd; padding:15px; border-radius:10px; margin-bottom:20px; display:flex; align-items:center;">
                     <input type="checkbox" th:field="*{emergency247}" style="width:20px; margin:0 10px 0 0;">
                     <label style="margin:0; cursor:pointer;">¿Cuenta con servicio de Urgencia 24 Horas?</label>
                 </div>
 
                 <label>Descripción / Servicios Ofrecidos</label>
-                <textarea th:field="*{description}" rows="5" placeholder="Detalla los servicios: Rayos X, Peluquería, Cirugía..."></textarea>
+                <textarea th:field="*{description}" rows="5"
+                    placeholder="Detalla los servicios: Rayos X, Peluquería, Cirugía..."></textarea>
+                <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"
+                    style="color: red; font-size: 0.85em; display: block; margin-top: 5px;"></span>
 
                 <div style="display:flex; gap:10px; margin-top:20px;">
                     <button type="submit" class="btn" style="flex:1;">GUARDAR DATOS</button>
-                    <a th:href="@{/clinics}" class="btn btn-danger" style="flex:1; text-align:center; background: #ccc; color:#333;">CANCELAR</a>
+                    <a th:href="@{/clinics}" class="btn btn-danger"
+                        style="flex:1; text-align:center; background: #ccc; color:#333;">CANCELAR</a>
                 </div>
             </form>
         </div>
     </div>
     <div th:replace="~{layout/main :: footer}"></div>
 </body>
+
 </html>

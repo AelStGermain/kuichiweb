@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="~{layout/main :: head_content}"></head>
+
 <body style="background: #f0f2f5; display:flex; align-items:center; justify-content:center; height:100vh;">
 
     <div class="card" style="width: 100%; max-width: 400px; text-align: center;">
         <h2 style="color: #4facfe;">🐶 ¡Bienvenido!</h2>
         <p>Ingresa a KuichiVet</p>
-        
+
         <div th:if="${param.error}" style="color: red; margin-bottom: 10px;">Credenciales incorrectas</div>
         <div th:if="${param.logout}" style="color: green; margin-bottom: 10px;">Has cerrado sesión</div>
-        <div th:if="${param.registered}" style="color: green; margin-bottom: 10px;">¡Registro exitoso! Ingresa ahora.</div>
+        <div th:if="${param.registered}" style="color: green; margin-bottom: 10px;">¡Registro exitoso! Ingresa ahora.
+        </div>
 
         <form th:action="@{/auth/login}" method="post">
             <input type="text" name="username" placeholder="Usuario" required>
@@ -21,7 +24,28 @@
             ¿No tienes cuenta? <a th:href="@{/auth/register}">Regístrate aquí</a>
         </p>
         <p><a th:href="@{/}">Volver al Inicio</a></p>
+
+        <!-- Información de usuarios de prueba -->
+        <div
+            style="background: #f0f8ff; padding: 15px; border-radius: 10px; margin-top: 20px; font-size: 0.85em; border: 1px solid #4facfe;">
+            <p style="margin: 0 0 10px 0; font-weight: bold; color: #333;">👥 Usuarios de Prueba:</p>
+            <ul style="text-align: left; list-style: none; padding: 0; margin: 0;">
+                <li style="margin: 5px 0;">
+                    <span
+                        style="background: #ff6b6b; color: white; padding: 2px 8px; border-radius: 8px; font-size: 0.85em; font-weight: bold;">👑
+                        ADMIN</span>
+                    <strong>admin</strong> / admin123
+                </li>
+                <li style="margin: 5px 0;">
+                    <span
+                        style="background: #4facfe; color: white; padding: 2px 8px; border-radius: 8px; font-size: 0.85em; font-weight: bold;">👤
+                        USER</span>
+                    <strong>maria.lopez</strong> / pass123
+                </li>
+            </ul>
+        </div>
     </div>
 
 </body>
+
 </html>

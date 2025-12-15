@@ -7,6 +7,7 @@ import cl.kuichi.kuichiweb.repository.ClinicRepository;
 import cl.kuichi.kuichiweb.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ReviewService {
@@ -20,6 +21,7 @@ public class ReviewService {
     /**
      * Agregar nueva reseña a una clínica
      */
+    @Transactional
     public void addReview(Long clinicId, AppUser author, Review review) {
         Clinic clinic = clinicRepo.findById(clinicId).orElse(null);
 
@@ -40,6 +42,7 @@ public class ReviewService {
     /**
      * Actualizar reseña existente (solo si el usuario es el autor)
      */
+    @Transactional
     public void updateReview(Long reviewId, Review updatedReview, AppUser currentUser) {
         Review existingReview = findById(reviewId);
 
@@ -53,6 +56,7 @@ public class ReviewService {
     /**
      * Eliminar reseña (solo si el usuario es el autor)
      */
+    @Transactional
     public void deleteReview(Long reviewId, AppUser currentUser) {
         Review review = findById(reviewId);
 

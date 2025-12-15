@@ -7,8 +7,10 @@ import cl.kuichi.kuichiweb.service.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.security.Principal;
 
 @Controller
@@ -27,7 +29,7 @@ public class PetController {
         // 'Principal' contiene el nombre del usuario logueado
         String username = principal.getName();
         AppUser currentUser = userService.findByUsername(username);
-        
+
         model.addAttribute("pets", petService.getPetsByOwner(currentUser));
         model.addAttribute("user", currentUser);
         return "pets/list";
@@ -42,10 +44,17 @@ public class PetController {
 
     // 3. GUARDAR (CREATE/UPDATE - POST)
     @PostMapping("/save")
-    public String savePet(@ModelAttribute Pet pet, Principal principal) {
+    public String savePet(@Valid @ModelAttribute Pet pet,
+            BindingResult result,
+            Principal principal,
+            Model model) {
+        if (result.hasErrors()) {
+            return "pets/form"; // Volver al formulario mostrando errores
+        }
+
         String username = principal.getName();
         AppUser currentUser = userService.findByUsername(username);
-        
+
         // Importante: Asignamos el dueño antes de guardar
         petService.savePet(pet, currentUser);
         return "redirect:/pets";
@@ -55,7 +64,8 @@ public class PetController {
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
         Pet pet = petService.findById(id);
-        // Seguridad básica: Verificar que la mascota sea del usuario actual podría ir aquí
+        // Seguridad básica: Verificar que la mascota sea del usuario actual podría ir
+        // aquí
         model.addAttribute("pet", pet);
         return "pets/form";
     }

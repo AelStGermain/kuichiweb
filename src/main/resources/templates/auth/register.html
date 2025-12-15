@@ -1,31 +1,58 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="~{layout/main :: head_content}"></head>
+
 <body style="background: #f0f2f5; display:flex; align-items:center; justify-content:center; min-height:100vh;">
 
     <div class="card" style="width: 100%; max-width: 500px;">
-        <h2 style="text-align: center; color: #ff9a9e;">📝 Crear Cuenta Nueva</h2>
-        
+        <h2 style="text-align: center; color: #4facfe;">📝 Crear Cuenta Nueva</h2>
+        <p style="text-align: center; color: #666; margin-bottom: 20px;">
+            Únete a KuichiVet y gestiona tus mascotas
+        </p>
+
+        <!-- Mensaje de error -->
+        <div th:if="${param.error}"
+            style="background: #ffebee; color: #c62828; padding: 12px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #c62828;">
+            <strong>⚠️ Error:</strong> El nombre de usuario ya existe o hubo un problema. Intenta con otro.
+        </div>
+
         <form th:action="@{/auth/register}" th:object="${user}" method="post">
-            <label>Nombre de Usuario</label>
-            <input type="text" th:field="*{username}" placeholder="Ej: juanperez" required>
-            
-            <label>Contraseña</label>
-            <input type="password" th:field="*{password}" placeholder="******" required>
-            
-            <label>Nombre Completo</label>
+            <label>Nombre de Usuario <span style="color: red;">*</span></label>
+            <input type="text" th:field="*{username}" placeholder="Ej: juanperez" required minlength="3">
+            <small style="color: #666;">Mínimo 3 caracteres, sin espacios</small>
+
+            <label style="margin-top: 10px;">Contraseña <span style="color: red;">*</span></label>
+            <input type="password" th:field="*{password}" placeholder="******" required minlength="6">
+            <small style="color: #666;">Mínimo 6 caracteres</small>
+
+            <label style="margin-top: 10px;">Nombre Completo <span style="color: red;">*</span></label>
             <input type="text" th:field="*{fullName}" placeholder="Ej: Juan Pérez" required>
-            
-            <label>Email</label>
+
+            <label style="margin-top: 10px;">Email <span style="color: red;">*</span></label>
             <input type="email" th:field="*{email}" placeholder="juan@email.com" required>
-            
-            <button type="submit" class="btn btn-secondary" style="width:100%">REGISTRARSE</button>
+
+            <!-- Información de rol por defecto -->
+            <div
+                style="background: #e3f2fd; padding: 12px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #4facfe;">
+                <p style="margin: 0; font-size: 0.9em; color: #1976d2;">
+                    <strong>👤 Rol asignado:</strong> Usuario Regular<br>
+                    <small>Podrás gestionar tus mascotas y dejar reseñas</small>
+                </p>
+            </div>
+
+            <button type="submit" class="btn" style="width:100%; margin-top: 10px;">
+                ✨ CREAR MI CUENTA
+            </button>
         </form>
-        
+
         <div style="text-align: center; margin-top: 15px;">
             <a th:href="@{/auth/login}">¿Ya tienes cuenta? Ingresa</a>
+            <span style="margin: 0 10px;">|</span>
+            <a th:href="@{/}">Volver al Inicio</a>
         </div>
     </div>
 
 </body>
+
 </html>

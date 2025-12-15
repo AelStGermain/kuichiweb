@@ -5,6 +5,7 @@ import cl.kuichi.kuichiweb.model.Pet;
 import cl.kuichi.kuichiweb.repository.PetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class PetService {
     }
 
     // Guardar mascota vinculándola al dueño
+    @Transactional
     public void savePet(Pet pet, AppUser owner) {
         pet.setOwner(owner); // Asignamos el dueño automáticamente
         petRepo.save(pet);
@@ -29,6 +31,7 @@ public class PetService {
         return petRepo.findById(id).orElse(null);
     }
 
+    @Transactional
     public void deletePet(Long id) {
         petRepo.deleteById(id);
     }

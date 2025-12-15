@@ -7,6 +7,7 @@ import cl.kuichi.kuichiweb.repository.ClinicRepository;
 import cl.kuichi.kuichiweb.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,11 +34,13 @@ public class ClinicService {
     }
 
     // CREATE & UPDATE (Guardar Clínica)
+    @Transactional
     public void saveClinic(Clinic clinic) {
         clinicRepo.save(clinic);
     }
 
     // DELETE (Eliminar Clínica)
+    @Transactional
     public void deleteClinic(Long id) {
         clinicRepo.deleteById(id);
     }
@@ -45,15 +48,16 @@ public class ClinicService {
     /**
      * Guarda una reseña vinculándola a la clínica y al usuario autor.
      */
+    @Transactional
     public void addReview(Long clinicId, AppUser author, Review review) {
         // 1. Buscamos la clínica por ID
         Clinic clinic = findById(clinicId);
-        
+
         // 2. Si existe, vinculamos todo y guardamos
         if (clinic != null) {
             review.setClinic(clinic); // Decimos "esta reseña es de ESTA clínica"
             review.setAuthor(author); // Decimos "esta reseña la escribió ESTE usuario"
-            reviewRepo.save(review);  // Guardamos en la BD
+            reviewRepo.save(review); // Guardamos en la BD
         }
     }
 }
