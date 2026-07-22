@@ -48,8 +48,14 @@
   <!-- PAGE 1: INICIO (HOME) -->
   <div id="tab-home" class="tab-page">
     <section class="hero">
-      <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1548767797-d8c844163c65?q=80&w=1600');"></div>
+      <!-- Diapositivas de fondo con fotos reales de mascotas -->
+      <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1548767797-d8c844163c65?q=80&w=1600');"></div>
+      <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?q=80&w=1600');"></div>
+      <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?q=80&w=1600');"></div>
+      <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1530041539828-114de669390e?q=80&w=1600');"></div>
+
       <div class="hero-overlay"></div>
+      
       <div class="hero-content">
         <h1>Cuidamos lo que más amas ❤️</h1>
         <p>La red de clínicas veterinarias y ofertas en atención médica para mascotas en Santiago.</p>
@@ -58,6 +64,14 @@
           <input type="text" id="heroSearchInput" placeholder="Busca clínicas, comunas o especialidades (ej: Providencia, Urgencias)...">
           <button onclick="executeHeroSearch()"><i class="fas fa-search"></i> Buscar</button>
         </div>
+      </div>
+
+      <!-- Indicadores de navegación del carrusel -->
+      <div class="hero-dots">
+        <div class="hero-dot active" onclick="setHeroSlide(0)"></div>
+        <div class="hero-dot" onclick="setHeroSlide(1)"></div>
+        <div class="hero-dot" onclick="setHeroSlide(2)"></div>
+        <div class="hero-dot" onclick="setHeroSlide(3)"></div>
       </div>
     </section>
 

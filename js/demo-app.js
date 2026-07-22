@@ -124,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupNavigation();
   setupRoleSwitcher();
   setupHeroSearch();
+  setupHeroSlider();
   renderHome();
   renderClinics();
   renderOffers();
@@ -652,4 +653,49 @@ function showToast(message, type = 'success') {
     toast.style.transform = 'translateX(100%)';
     setTimeout(() => toast.remove(), 300);
   }, 3500);
+}
+
+// --- LOGICA DEL CARRUSEL DE HERO (SLIDER AUTOMÁTICO) ---
+let currentHeroIndex = 0;
+let heroTimer = null;
+
+function setupHeroSlider() {
+  startHeroTimer();
+}
+
+function startHeroTimer() {
+  if (heroTimer) clearInterval(heroTimer);
+  heroTimer = setInterval(() => {
+    const slides = document.querySelectorAll('.hero-slide');
+    if (slides.length > 0) {
+      const nextIndex = (currentHeroIndex + 1) % slides.length;
+      setHeroSlide(nextIndex);
+    }
+  }, 4500); // Cambia cada 4.5 segundos
+}
+
+function setHeroSlide(index) {
+  const slides = document.querySelectorAll('.hero-slide');
+  const dots = document.querySelectorAll('.hero-dot');
+
+  if (slides.length === 0) return;
+
+  slides.forEach((s, idx) => {
+    if (idx === index) {
+      s.classList.add('active');
+    } else {
+      s.classList.remove('active');
+    }
+  });
+
+  dots.forEach((d, idx) => {
+    if (idx === index) {
+      d.classList.add('active');
+    } else {
+      d.classList.remove('active');
+    }
+  });
+
+  currentHeroIndex = index;
+  startHeroTimer(); // Reiniciar temporizador al hacer click manual
 }
