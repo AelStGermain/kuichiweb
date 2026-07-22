@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KuichiWeb - Visor Veterinario & Asistencia para Mascotas</title>
+  <meta name="description" content="Plataforma de servicios veterinarios, atención de urgencia 24/7, ofertas exclusivas y gestión sanitaria de mascotas en Santiago.">
+  <meta property="og:title" content="KuichiWeb - Tu Red de Servicios Veterinarios">
+  <meta property="og:description" content="Encuentra las mejores clínicas veterinarias, descuentos en vacunas y gestiona tus mascotas en un solo lugar.">
+  <meta property="og:type" content="website">
+
+  <!-- Icons & Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/demo.css">
+</head>
+<body>
+
+  <!-- Top Header Banner (Role Simulator) -->
+  <div class="header-banner">
+    <div>
+      <i class="fas fa-flask"></i> <strong>Modo Demo GitHub Pages</strong> &mdash; Explora todas las funcionalidades sin backend.
+    </div>
+    <div class="role-switcher">
+      <label for="roleSelect"><i class="fas fa-user-shield"></i> Simular Rol:</label>
+      <select id="roleSelect">
+        <option value="USER">👤 Usuario Registrado</option>
+        <option value="ADMIN">🛡️ Administrador</option>
+        <option value="GUEST">🌐 Invitado (Sin sesión)</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="#" onclick="switchTab('home')" class="logo">
+      <div class="logo-icon"><i class="fas fa-paw"></i></div>
+      <span>Kuichi<span style="color:var(--secondary);">Vet</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a class="nav-link active" data-tab="home"><i class="fas fa-home"></i> Inicio</a></li>
+      <li><a class="nav-link" data-tab="clinicas"><i class="fas fa-clinic-medical"></i> Clínicas</a></li>
+      <li><a class="nav-link" data-tab="ofertas"><i class="fas fa-tags"></i> Ofertas</a></li>
+      <li id="nav-pets-tab"><a class="nav-link" data-tab="mascotas"><i class="fas fa-dog"></i> Mis Mascotas</a></li>
+      <li id="nav-admin-tab" style="display:none;"><a class="nav-link" data-tab="admin" style="color:var(--secondary);"><i class="fas fa-plus-circle"></i> Nueva Clínica</a></li>
+    </ul>
+  </nav>
+
+  <!-- PAGE 1: INICIO (HOME) -->
+  <div id="tab-home" class="tab-page">
+    <section class="hero">
+      <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1548767797-d8c844163c65?q=80&w=1600');"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1>Cuidamos lo que más amas ❤️</h1>
+        <p>La red de clínicas veterinarias y ofertas en atención médica para mascotas en Santiago.</p>
+        
+        <div class="hero-search">
+          <input type="text" id="heroSearchInput" placeholder="Busca clínicas, comunas o especialidades (ej: Providencia, Urgencias)...">
+          <button onclick="executeHeroSearch()"><i class="fas fa-search"></i> Buscar</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+      <div id="userGreetingBar" style="background: white; padding: 24px 30px; border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); margin-bottom: 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap:wrap; gap:15px;">
+        <div>
+          <h2 id="userGreeting" style="margin:0; font-size:1.6rem; color:var(--primary);">¡Hola, Usuario PetLover! 🐾</h2>
+          <p style="color:var(--text-muted); margin-top:4px;">¿Qué servicio necesita tu mascota hoy?</p>
+        </div>
+        <button onclick="switchTab('clinicas')" class="btn btn-primary">
+          <i class="fas fa-search-location"></i> Buscar Veterinaria Cercana
+        </button>
+      </div>
+
+      <!-- Feature Highlights -->
+      <div style="text-align:center; margin-bottom:50px;">
+        <h2 style="font-size:2.2rem; margin-bottom:12px;">¿Por qué elegir KuichiVet?</h2>
+        <p style="color:var(--text-muted); max-width:600px; margin:0 auto 30px;">Conectamos a dueños responsables con profesionales de salud animal de confianza.</p>
+        
+        <div class="grid-3">
+          <div class="card" style="padding:30px; text-align:center;">
+            <i class="fas fa-ambulance fa-3x" style="color:var(--secondary); margin-bottom:16px;"></i>
+            <h3 style="margin-bottom:10px;">Atención de Urgencia 24/7</h3>
+            <p style="color:var(--text-muted); font-size:0.95rem;">Filtra fácilmente hospitales veterinarios con atención nocturna y quirúrgica inmediata.</p>
+          </div>
+          <div class="card" style="padding:30px; text-align:center;">
+            <i class="fas fa-percentage fa-3x" style="color:var(--primary); margin-bottom:16px;"></i>
+            <h3 style="margin-bottom:10px;">Descuentos Exclusivos</h3>
+            <p style="color:var(--text-muted); font-size:0.95rem;">Accede a cupones promocionales en vacunas, ecografías y consultas preventivas.</p>
+          </div>
+          <div class="card" style="padding:30px; text-align:center;">
+            <i class="fas fa-star fa-3x" style="color:var(--warning); margin-bottom:16px;"></i>
+            <h3 style="margin-bottom:10px;">Reseñas Verificadas</h3>
+            <p style="color:var(--text-muted); font-size:0.95rem;">Revisa las opiniones y calificaciones de otros dueños de mascotas antes de asistir.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Promociones Destacadas -->
+      <div class="section-title">
+        <h2>🔥 Ofertas Destacadas</h2>
+        <a href="#" onclick="switchTab('ofertas')" style="color:var(--primary); font-weight:700; text-decoration:none;">Ver todas las ofertas &rarr;</a>
+      </div>
+      <div id="home-offers-grid" class="grid-3" style="margin-bottom:50px;"></div>
+
+      <!-- Veterinarias Destacadas -->
+      <div class="section-title">
+        <h2>🏥 Veterinarias Destacadas</h2>
+        <a href="#" onclick="switchTab('clinicas')" style="color:var(--primary); font-weight:700; text-decoration:none;">Ver todas las clínicas &rarr;</a>
+      </div>
+      <div id="home-clinics-grid" class="grid-3"></div>
+    </div>
+  </div>
+
+  <!-- PAGE 2: DIRECTORIO DE CLÍNICAS -->
+  <div id="tab-clinicas" class="tab-page" style="display:none;">
+    <div class="container">
+      <div class="section-title">
+        <h2>Directorio de Clínicas Veterinarias</h2>
+        <p style="color:var(--text-muted);">Encuentra la veterinaria ideal según tu comuna y necesidades.</p>
+      </div>
+
+      <!-- Filter Controls -->
+      <div class="filter-bar">
+        <div class="search-input-group">
+          <i class="fas fa-search"></i>
+          <input type="text" id="clinicSearchInput" oninput="renderClinics()" placeholder="Buscar por nombre, dirección o servicio...">
+        </div>
+        
+        <select id="clinicCommuneFilter" class="filter-select" onchange="renderClinics()">
+          <option value="ALL">Todas las Comunas</option>
+        </select>
+
+        <label class="checkbox-toggle">
+          <input type="checkbox" id="clinicEmergencyFilter" onchange="renderClinics()">
+          <i class="fas fa-ambulance" style="color:var(--danger);"></i> Solo 24/7 Urgencias
+        </label>
+      </div>
+
+      <!-- Clinics Grid -->
+      <div id="clinics-grid" class="grid-3"></div>
+    </div>
+  </div>
+
+  <!-- PAGE 3: CATÁLOGO DE OFERTAS -->
+  <div id="tab-ofertas" class="tab-page" style="display:none;">
+    <div class="container">
+      <div class="section-title">
+        <h2>Ofertas y Beneficios Veterinarios</h2>
+        <p style="color:var(--text-muted);">Descuentos activos verificados por KuichiVet para la salud de tu mascota.</p>
+      </div>
+
+      <div id="offers-grid" class="grid-3"></div>
+    </div>
+  </div>
+
+  <!-- PAGE 4: MIS MASCOTAS (Pets CRUD) -->
+  <div id="tab-mascotas" class="tab-page" style="display:none;">
+    <div class="container">
+      <div class="section-title">
+        <h2>Mis Mascotas Registradas</h2>
+        <button onclick="openPetModal()" class="btn btn-primary">
+          <i class="fas fa-plus"></i> Registrar Mascota
+        </button>
+      </div>
+
+      <div id="pets-grid" class="grid-3"></div>
+    </div>
+  </div>
+
+  <!-- PAGE 5: PANEL DE ADMINISTRACIÓN (NUEVA CLÍNICA) -->
+  <div id="tab-admin" class="tab-page" style="display:none;">
+    <div class="container" style="max-width:700px;">
+      <div class="card" style="padding:32px;">
+        <div class="section-title">
+          <h2>🛡️ Agregar Nueva Clínica (Admin)</h2>
+        </div>
+        <p style="color:var(--text-muted); margin-bottom:24px;">Publica una nueva veterinaria en la red KuichiWeb.</p>
+
+        <form onsubmit="handleAddClinicAdmin(event)">
+          <div class="form-group">
+            <label>Nombre de la Clínica</label>
+            <input type="text" id="adminClinicName" class="form-control" placeholder="Ej: Centro Veterinario San Bernardo" required>
+          </div>
+          
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+            <div class="form-group">
+              <label>Comuna</label>
+              <input type="text" id="adminClinicCommune" class="form-control" placeholder="Ej: Providencia" required>
+            </div>
+            <div class="form-group">
+              <label>Teléfono de Contacto</label>
+              <input type="text" id="adminClinicPhone" class="form-control" placeholder="Ej: +56912345678" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Dirección Completa</label>
+            <input type="text" id="adminClinicAddress" class="form-control" placeholder="Ej: Av. Italia 1234, Providencia" required>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+            <div class="form-group">
+              <label>Horario de Atención</label>
+              <input type="text" id="adminClinicHours" class="form-control" placeholder="Ej: Lun-Vie 09:00 - 20:00" required>
+            </div>
+            <div class="form-group" style="display:flex; align-items:center; gap:10px; margin-top:28px;">
+              <input type="checkbox" id="adminClinicEmergency" style="width:20px; height:20px;">
+              <label for="adminClinicEmergency" style="margin:0; cursor:pointer;">Atención 24/7 Urgencias</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Descripción de Servicios</label>
+            <textarea id="adminClinicDesc" class="form-control" placeholder="Describe los servicios médicos, pabellón quirúrgico, especialidades..." required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; padding:14px;">
+            <i class="fas fa-save"></i> Publicar Clínica
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: DETALLE DE CLÍNICA -->
+  <div id="clinicModal" class="modal-backdrop">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="margin:0;"><i class="fas fa-clinic-medical" style="color:var(--primary);"></i> Ficha de Veterinaria</h3>
+        <button class="modal-close" onclick="closeClinicModal()">&times;</button>
+      </div>
+      <div id="clinicModalBody" class="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: REGISTRAR MASCOTA -->
+  <div id="petModal" class="modal-backdrop">
+    <div class="modal-content" style="max-width:550px;">
+      <div class="modal-header">
+        <h3 style="margin:0;"><i class="fas fa-paw" style="color:var(--primary);"></i> Ficha de Mascota</h3>
+        <button class="modal-close" onclick="closePetModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form onsubmit="handleAddPet(event)">
+          <div class="form-group">
+            <label>Nombre de la Mascota</label>
+            <input type="text" id="petName" class="form-control" placeholder="Ej: Rocky" required>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+            <div class="form-group">
+              <label>Especie</label>
+              <select id="petSpecies" class="form-control">
+                <option value="Perro">🐶 Perro</option>
+                <option value="Gato">🐱 Gato</option>
+                <option value="Exótico">🐰 Exótico / Otro</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Raza</label>
+              <input type="text" id="petBreed" class="form-control" placeholder="Ej: Poodle, Mestizo..." required>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+            <div class="form-group">
+              <label>Edad (Años)</label>
+              <input type="number" id="petAge" class="form-control" min="0" max="30" value="2" required>
+            </div>
+            <div class="form-group">
+              <label>Nº de Microchip (Opcional)</label>
+              <input type="text" id="petChip" class="form-control" placeholder="Ej: CHIP-9821039">
+            </div>
+          </div>
+
+          <div class="form-group" style="display:flex; align-items:center; gap:10px;">
+            <input type="checkbox" id="petVaccinated" checked style="width:18px; height:18px;">
+            <label for="petVaccinated" style="margin:0; cursor:pointer;">Vacunación al día</label>
+          </div>
+
+          <div class="form-group">
+            <label>Notas Sanitarias / Alergias</label>
+            <textarea id="petNotes" class="form-control" placeholder="Ej: Alérgico a vacunas contra la rabia, alimento especial..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; padding:12px;">
+            Guardar Ficha
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="logo" style="color:white; margin-bottom:15px;">
+          <div class="logo-icon"><i class="fas fa-paw"></i></div>
+          <span>Kuichi<span style="color:var(--secondary);">Vet</span></span>
+        </div>
+        <p style="font-size:0.9rem;">Plataforma líder en visibilidad de servicios veterinarios y gestión de salud para mascotas en Chile.</p>
+      </div>
+      
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <ul class="footer-links">
+          <li><a href="#" onclick="switchTab('home')">Inicio</a></li>
+          <li><a href="#" onclick="switchTab('clinicas')">Buscar Veterinarias</a></li>
+          <li><a href="#" onclick="switchTab('ofertas')">Ofertas y Descuentos</a></li>
+          <li><a href="#" onclick="switchTab('mascotas')">Mis Mascotas</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Urgencias 24h Santiago</h4>
+        <ul class="footer-links">
+          <li><a href="tel:+56229785555">Hospital U. de Chile (+56 2 2978 5555)</a></li>
+          <li><a href="tel:+56222223333">Clínica Alemana Vet (+56 2 2222 3333)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 KuichiWeb - Demo interactiva generada para GitHub Pages. Desarrollado con HTML5, Vanilla JS y CSS3.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/demo-app.js"></script>
+</body>
+</html>
