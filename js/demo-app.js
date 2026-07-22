@@ -64,8 +64,39 @@ const INITIAL_OFFERS = [
 ];
 
 const INITIAL_PETS = [
-  { id: 1, name: "Max", species: "Perro", breed: "Golden Retriever", age: 3, vaccinated: true, chipNumber: "CHIP-9821039", notes: "Alergia leve al pollo" },
-  { id: 2, name: "Luna", species: "Gato", breed: "Siamés", age: 2, vaccinated: true, chipNumber: "CHIP-4410921", notes: "Esquema completo al día" }
+  {
+    id: 1,
+    name: "Max",
+    species: "Perro",
+    breed: "Golden Retriever",
+    age: 3,
+    vaccinated: true,
+    chipNumber: "CHIP-9821039",
+    notes: "Alergia leve al pollo. Le gusta nadar.",
+    imageUrl: "https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=800&auto=format&fit=crop"
+  },
+  {
+    id: 2,
+    name: "Luna",
+    species: "Gato",
+    breed: "Siamés",
+    age: 2,
+    vaccinated: true,
+    chipNumber: "CHIP-4410921",
+    notes: "Esquema de vacunas completo. Muy juguetona.",
+    imageUrl: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=800&auto=format&fit=crop"
+  },
+  {
+    id: 3,
+    name: "Toby",
+    species: "Perro",
+    breed: "Beagle",
+    age: 4,
+    vaccinated: true,
+    chipNumber: "CHIP-1029384",
+    notes: "Chequeo cardíaco anual OK.",
+    imageUrl: "https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?q=80&w=800&auto=format&fit=crop"
+  }
 ];
 
 // --- ESTADO DE LA APLICACIÓN ---
@@ -412,6 +443,23 @@ function claimOffer(code) {
   showToast(`¡Código ${code} copiado al portapapeles! Preséntalo en la veterinaria.`, 'success');
 }
 
+// Fotos por defecto según especie
+const DEFAULT_PET_PHOTOS = {
+  Perro: [
+    "https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=800&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?q=80&w=800&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=800&auto=format&fit=crop"
+  ],
+  Gato: [
+    "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=800&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1573865526739-10659fec78a5?q=80&w=800&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?q=80&w=800&auto=format&fit=crop"
+  ],
+  Exótico: [
+    "https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?q=80&w=800&auto=format&fit=crop"
+  ]
+};
+
 // 5. MIS MASCOTAS (Pets CRUD)
 function renderPets() {
   const container = document.getElementById('pets-grid');
@@ -428,32 +476,40 @@ function renderPets() {
     return;
   }
 
-  container.innerHTML = state.pets.map(pet => `
-    <div class="card">
-      <div class="card-body">
-        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
-          <div>
-            <h3 class="card-title" style="font-size:1.5rem; margin:0;">${escapeHtml(pet.name)}</h3>
-            <span style="color:var(--primary); font-weight:700; font-size:0.9rem;">${escapeHtml(pet.species)} - ${escapeHtml(pet.breed)}</span>
+  container.innerHTML = state.pets.map(pet => {
+    const photoUrl = pet.imageUrl || (DEFAULT_PET_PHOTOS[pet.species] ? DEFAULT_PET_PHOTOS[pet.species][0] : DEFAULT_PET_PHOTOS.Perro[0]);
+
+    return `
+      <div class="card">
+        <div class="card-img-wrapper" style="height: 180px;">
+          <img src="${photoUrl}" alt="${escapeHtml(pet.name)}" onerror="this.src='${DEFAULT_PET_PHOTOS.Perro[0]}'">
+          <span class="badge-commune"><i class="fas fa-paw"></i> ${escapeHtml(pet.species)}</span>
+        </div>
+        <div class="card-body">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+            <div>
+              <h3 class="card-title" style="font-size:1.5rem; margin:0;">${escapeHtml(pet.name)}</h3>
+              <span style="color:var(--primary); font-weight:700; font-size:0.9rem;">${escapeHtml(pet.breed)}</span>
+            </div>
+            <span style="font-size:1.8rem;">${pet.species === 'Perro' ? '🐶' : pet.species === 'Gato' ? '🐱' : '🐰'}</span>
           </div>
-          <span style="font-size:2rem;">${pet.species === 'Perro' ? '🐶' : pet.species === 'Gato' ? '🐱' : '🐰'}</span>
-        </div>
 
-        <div style="display:flex; flex-direction:column; gap:8px; margin:16px 0; font-size:0.92rem;">
-          <div><strong>Edad:</strong> ${pet.age} años</div>
-          <div><strong>Microchip:</strong> ${escapeHtml(pet.chipNumber || 'Sin chip')}</div>
-          <div><strong>Vacunación:</strong> ${pet.vaccinated ? '✅ Al día' : '⚠️ Pendiente'}</div>
-          ${pet.notes ? `<div><strong>Notas Sanitarias:</strong> ${escapeHtml(pet.notes)}</div>` : ''}
-        </div>
+          <div style="display:flex; flex-direction:column; gap:8px; margin:16px 0; font-size:0.92rem;">
+            <div><strong>Edad:</strong> ${pet.age} años</div>
+            <div><strong>Microchip:</strong> ${escapeHtml(pet.chipNumber || 'Sin chip')}</div>
+            <div><strong>Vacunación:</strong> ${pet.vaccinated ? '✅ Al día' : '⚠️ Pendiente'}</div>
+            ${pet.notes ? `<div><strong>Notas Sanitarias:</strong> ${escapeHtml(pet.notes)}</div>` : ''}
+          </div>
 
-        <div class="card-footer">
-          <button onclick="deletePet(${pet.id})" class="btn btn-secondary" style="color:var(--danger); padding:6px 14px; font-size:0.85rem;">
-            <i class="fas fa-trash-alt"></i> Eliminar
-          </button>
+          <div class="card-footer">
+            <button onclick="deletePet(${pet.id})" class="btn btn-secondary" style="color:var(--danger); padding:6px 14px; font-size:0.85rem;">
+              <i class="fas fa-trash-alt"></i> Eliminar
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 function handleAddPet(e) {
@@ -465,10 +521,16 @@ function handleAddPet(e) {
   const chipNumber = document.getElementById('petChip').value.trim();
   const vaccinated = document.getElementById('petVaccinated').checked;
   const notes = document.getElementById('petNotes').value.trim();
+  const userPhotoUrl = document.getElementById('petPhotoUrl')?.value.trim();
+
+  // Asignar foto ingresada o seleccionar una de la galería de Unsplash según especie
+  const speciesPhotos = DEFAULT_PET_PHOTOS[species] || DEFAULT_PET_PHOTOS.Perro;
+  const randomPhoto = speciesPhotos[Math.floor(Math.random() * speciesPhotos.length)];
+  const imageUrl = userPhotoUrl || randomPhoto;
 
   state.pets.push({
     id: Date.now(),
-    name, species, breed, age, chipNumber, vaccinated, notes
+    name, species, breed, age, chipNumber, vaccinated, notes, imageUrl
   });
   state.savePets();
   renderPets();
